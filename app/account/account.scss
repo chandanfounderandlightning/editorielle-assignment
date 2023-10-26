@@ -1,0 +1,90 @@
+@use "../../common/theme/colours.scss" as colours;
+div.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    .login-section{
+      margin-top: 24px;
+      p {
+        display: inline-block;
+      }
+    }
+    .login-forgot-password-signin{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      margin-top: 24px;
+      align-items: center;
+      p{
+        display: inline-block;
+        margin-top: 24px;
+      }
+    }
+    .forgot-password-contact-support {
+      width: 100%;
+      text-align: center;
+      margin-top: 24px;
+      p{
+        display: inline-block;
+      }
+    }
+    .reset-password-success{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 496px;
+    }
+}
+
+div.form-container{
+    width: 100%;
+    max-width: 496px;
+    h5{
+        text-align: center;
+        font-weight: 400;
+    }
+    .terms-and-conditions {
+      margin-top: 24px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      p, h6{
+        display: inline-block;
+      }
+      h6 {
+        cursor: pointer;
+        color: colours.$green-700;
+      }
+    }
+    .firstname-lastname{
+      display: flex;
+      gap: 16px;
+      flex-wrap: nowrap;
+      label {
+        width: 50%;
+      }
+    }
+    .password-validations{
+      margin-top: 8px;
+      margin-left: 8px;
+      height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+      &.show{
+        height: 80px;
+      }
+    }
+}
+
+.form-container > form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-container > form > button {
+    align-self: center;
+}

@@ -1,0 +1,102 @@
+@use "../../theme/colours.scss" as colours;
+@import "../../theme/theme.scss";
+
+.custom-button {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  display: inline-block;
+  border-radius: map-get($theme, borderRadius, border-radius-medium);
+  font-family: map-get($theme, typography, heading-compact-01, fontFamily);
+  letter-spacing: map-get($theme, typography, heading-compact-01, letterSpacing);
+  margin-top: map-get($theme, typography, heading-compact-01, marginTop);
+  margin-bottom: map-get($theme, typography, heading-compact-01, marginBottom);
+  margin-left: map-get($theme, typography, heading-compact-01, marginLeft);
+  text-transform: map-get($theme, typography, heading-compact-01, textTransform);
+  text-decoration: map-get($theme, typography, heading-compact-01, textDecoration);
+  transition: all 0.2s ease-in-out;
+  &:disabled {
+    color: #FFF;
+    background-color: colours.$grey-500;
+    cursor: not-allowed;
+    &:hover {
+      background-color: colours.$grey-500;
+    }
+  }
+  &.primary {
+    color: #FFF;
+    background-color: colours.$green-400;
+    &:hover {
+      background-color: colours.$green-700;
+    }
+  }
+  &.secondary {
+    color: #000;
+    background-color: #000;
+    &:hover {
+      background-color: colours.$grey-300;
+    }
+  }
+  &.outlined {
+    color: colours.$grey-300;
+    background-color: transparent;
+    border: 1px solid colours.$grey-300;
+    &:hover {
+      color: colours.$grey-300;
+      border: 1px solid colours.$grey-300;
+    }
+  }
+  &.small {
+    font-weight: map-get($theme, typography, Body-compact-01, fontWeight);
+    line-height: map-get($theme, typography, Body-compact-01, lineHeight);
+    font-size: map-get($theme, typography, Body-compact-01, fontSize);
+    padding: 7px 12px;
+    svg {
+      min-width: 16px;
+      min-height: 16px;
+      max-width: 16px;
+      max-height: 16px;
+      margin-right: 8px;
+    }
+  }
+  &.medium, &.base{
+    font-weight: map-get($theme, typography, Body-compact-01, fontWeight);
+    line-height: map-get($theme, typography, Body-compact-01, lineHeight);
+    font-size: map-get($theme, typography, Body-compact-01, fontSize);
+    padding: 11px 16px;
+    svg {
+      min-width: 20px;
+      min-height: 20px;
+      max-width: 20px;
+      max-height: 20px;
+      margin-right: 8px;
+    }
+  }
+  &.large {
+    font-weight: map-get($theme, typography, heading-compact-02, fontWeight);
+    line-height: map-get($theme, typography, heading-compact-02, lineHeight);
+    font-size: map-get($theme, typography, heading-compact-02, fontSize);
+    padding: 11px 16px;
+    svg {
+      min-width: 20px;
+      min-height: 20px;
+      max-width: 20px;
+      max-height: 20px;
+      margin-right: 12px;
+    }
+  }
+  &:disabled {
+    color: #fff;
+    background-color: colours.$grey-200;
+    cursor: not-allowed;
+    border: none;
+    &:hover {
+      color: #fff;
+      background-color: colours.$grey-200;
+      border: none;
+    }
+  }
+}
+

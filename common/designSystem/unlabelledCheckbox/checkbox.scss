@@ -1,0 +1,25 @@
+@import "../../theme/theme.scss";
+.custom-checkbox {
+    all: unset;
+    margin-top: 2px;
+    min-width: 14px;
+    min-height: 14px;
+    border: 1px solid map-get($theme,palette,ui-base,grey40);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    background-color: map-get($theme,palette,background,ui-background);
+    transition: all 0.2s ease-in-out;
+    &.checked {
+        background-color: map-get($theme,palette,brand,brand-500);
+        border: 1px solid map-get($theme,palette,brand,brand-500);
+    }
+    &:hover {
+        border: 1px solid map-get($theme,palette,brand,brand-500);
+    }
+    svg {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+    }
+}

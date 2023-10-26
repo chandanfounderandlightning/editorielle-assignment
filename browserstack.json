@@ -1,0 +1,92 @@
+{
+    "auth": {
+        "username": "editorielleadmin_MWFJUN",
+        "access_key": "KsNnu5eqhceyvHSpApDP"
+    },
+    "browsers": [{
+        "browser": "chrome",
+        "os": "Windows 10",
+        "versions": ["latest", "latest - 1"]
+      },
+      {
+        "browser": "firefox",
+        "os": "OS X Mojave",
+        "versions": ["latest", "latest - 1"]
+      },
+      {
+        "browser": "edge",
+        "os": "OS X Catalina",
+        "versions": ["latest"]
+      }
+    ],
+  
+    "run_settings": {
+        "cypress_config_file": "./cypress.config.ts",
+        "project_name": "Cypress Editorille",
+        "build_name": "Build no: 1",
+        "exclude": ["some-folder/test.js", "static/*.pdf"],
+        "parallels": "2",
+        "npm_dependencies": {
+            "@headlessui/react": "^1.7.15",
+            "@hookform/resolvers": "^3.1.0",
+            "@stripe/stripe-js": "^1.54.1",
+            "@types/node": "20.0.0",
+            "@types/react": "18.2.5",
+            "@types/react-dom": "18.2.3",
+            "autoprefixer": "10.4.14",
+            "axios": "^1.4.0",
+            "browserstack-cypress-cli": "^1.21.0",
+            "eslint-config-next": "13.4.0",
+            "mixpanel-browser": "^2.47.0",
+            "next": "13.4.0",
+            "next-auth": "^4.22.1",
+            "postcss": "8.4.23",
+            "react": "18.2.0",
+            "react-dom": "18.2.0",
+            "react-hook-form": "^7.44.3",
+            "sass": "^1.63.3",
+            "stripe": "^12.10.0",
+            "swr": "^2.1.5",
+            "tailwindcss": "3.3.2",
+            "yup": "^1.2.0",
+            "@storybook/addon-essentials": "^7.0.12",
+            "@storybook/addon-interactions": "^7.0.12",
+            "@storybook/addon-links": "^7.0.12",
+            "@storybook/blocks": "^7.0.12",
+            "@storybook/nextjs": "^7.0.12",
+            "@storybook/react": "^7.0.12",
+            "@storybook/testing-library": "^0.0.14-next.2",
+            "@svgr/cli": "^8.0.1",
+            "@svgr/webpack": "^8.0.1",
+            "@tailwindcss/forms": "^0.5.3",
+            "@testing-library/jest-dom": "^5.16.5",
+            "@testing-library/react": "^14.0.0",
+            "@types/mixpanel-browser": "^2.38.1",
+            "@typescript-eslint/eslint-plugin": "^5.60.1",
+            "@typescript-eslint/parser": "^5.60.1",
+            "chromatic": "^6.17.4",
+            "cypress": "^12.13.0",
+            "cypress-mailosaur": "^2.13.0",
+            "eslint": "^8.44.0",
+            "eslint-import-resolver-typescript": "^3.5.5",
+            "eslint-plugin-storybook": "^0.6.12",
+            "husky": "^8.0.0",
+            "jest": "^29.5.0",
+            "jest-environment-jsdom": "^29.5.0",
+            "json-to-scss": "^1.6.2",
+            "msw": "^1.2.3",
+            "storybook": "^7.0.12",
+            "ts-node": "^10.9.1",
+            "typescript": "^5.1.6"
+    },
+        "package_config_options": {},
+        "headless": true
+    },
+    "connection_settings": {
+        "local": false,
+        "local_identifier": null,
+        "local_mode": null,
+        "local_config_file": null
+    },
+    "disable_usage_reporting": false
+}

@@ -1,0 +1,174 @@
+version: 2.1
+
+orbs:
+  cypress: cypress-io/cypress@3
+  slack: circleci/slack@4
+
+commands:
+  notify-slack:
+    steps:
+      - run: echo 'export SLACK_PARAM_MENTIONS="$SLACK_MENTIONS"' >> $BASH_ENV
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
+jobs:
+  nextjs-deployment:
+    docker:
+      - image: cimg/node:lts
+    parameters:
+      environment:
+        type: string
+        default: 'uat'
+      environment-variables:
+        type: string
+        default: 'preview'
+    steps:
+      - checkout
+      - run:
+          name: Check Rejected Commits
+          environment:
+            - REVIEWEE_URL: https://api.reviewee.it
+          command: |
+            echo "Checking rejected commits..."
+            if [[ $SHOULD_CHECK_REJECTED_COMMITS == "true" ]]; then
+              response=$(wget -qO- ${REVIEWEE_URL}/repository/${CIRCLE_PROJECT_REPONAME}/haveRejectedCommits)
+              success=$(echo $response | grep -o '"success":[^,]*' | awk -F: '{print $2}')
+              if [ "$success" = "true" ]; then
+                echo "There are no rejected commits"
+                exit 0 # success
+              else
+                echo "There are rejected commits"
+                exit 1 # failure
+              fi
+            else
+             exit 0
+            fi
+      - run:
+          name: Install Vercel CLI
+          command: sudo npm install --global vercel@latest
+      - run:
+          name: Pull Vercel Environment Information
+          command: vercel pull --yes --environment=<< parameters.environment-variables >> --token=$VERCEL_API_TOKEN
+      - run:
+          name: Build Project Artifacts
+          command: |
+            if [[ << parameters.environment >> == "production" ]]; then
+              vercel build --prod --token=$VERCEL_API_TOKEN
+            else
+              vercel build --token=$VERCEL_API_TOKEN
+            fi
+      - run:
+          name: Run Unit and Integration Tests
+          command: npm run test
+      - run:
+          name: Deploy Project Artifacts to Vercel and save URL
+          command: |
+            if [[ << parameters.environment >> == "production" ]]; then
+              vercel deploy --prebuilt --prod --token=$VERCEL_API_TOKEN
+            else
+              mkdir /tmp/workspace
+              vercel deploy --prebuilt --token=$VERCEL_API_TOKEN | grep -o 'https:\/\/\S*' | sed 's/https:\/\///' >> /tmp/workspace/vercel_url
+              if [[ << parameters.environment >> == "preview" ]]; then
+                vercel alias --scope=$VERCEL_TEAM_NAME --token=$VERCEL_API_TOKEN $(cat /tmp/workspace/vercel_url) $VERCEL_UAT_URL
+              elif [[ << parameters.environment >> == "development" ]]; then
+                vercel alias --scope=$VERCEL_TEAM_NAME --token=$VERCEL_API_TOKEN $(cat /tmp/workspace/vercel_url) $VERCEL_DEV_URL
+              fi
+            fi
+      - notify-slack
+
+  prepare-e2e-tests:
+    executor: cypress/default
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - cypress/install
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .cache/Cypress
+            - project
+
+  run-e2e-tests-localhost:
+    executor: cypress/default
+    steps:
+      - cypress/install
+      - checkout
+      - run: echo 'export SLACK_PARAM_MENTIONS="$SLACK_MENTIONS"' >> $BASH_ENV
+      - cypress/run-tests:
+          start-command: npm run dev
+          cypress-command: npm run cypress:run
+      - notify-slack
+
+  run-e2e-tests-uat:
+    executor: cypress/default
+    steps:
+      - checkout
+      - run: echo 'export SLACK_PARAM_MENTIONS="$SLACK_MENTIONS"' >> $BASH_ENV
+      - run: echo 'export CYPRESS_BASE_URL="$UAT_BASE_URL"' >> $BASH_ENV
+      - attach_workspace:
+          at: ~/
+      - cypress/run-tests:
+          cypress-command: npm run cypress:run
+
+  deploy-chromatic:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: npm install
+      - run: npm run chromatic --project-token=${CHROMATIC_PROJECT_TOKEN} --exit-zero-on-changes
+      - notify-slack
+
+workflows:
+  version: 2
+  development:
+    jobs:
+      - nextjs-deployment:
+          environment: 'development'
+          environment-variables: 'preview'
+          filters:
+            branches:
+              ignore: /production|main/
+
+  preview:
+    jobs:
+      - nextjs-deployment:
+          environment: 'preview'
+          environment-variables: 'preview'
+          filters:
+            branches:
+              only: /main/
+      - prepare-e2e-tests:
+          requires:
+            - nextjs-deployment
+      - run-e2e-tests-uat:
+          requires:
+            - prepare-e2e-tests
+          filters:
+            branches:
+              only: /main/
+          post-steps:
+            - notify-slack
+      - deploy-chromatic:
+          filters:
+            branches:
+              only: /main/
+          post-steps:
+            - notify-slack
+
+  production:
+    jobs:
+      - nextjs-deployment:
+          environment: 'production'
+          environment-variables: 'production'
+          filters:
+            branches:
+              only: /production/

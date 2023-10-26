@@ -1,0 +1,35 @@
+.card-element{
+    border: 1 px solid !important;
+}
+#cardNumber{
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    padding: 12px 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+.expiryCVC{
+    display: block;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 18px;
+}
+#expiry{
+    display: inline-block;
+    width: 49%;
+    border: 1px solid #D1D5DB;
+    padding: 12px 6px;
+    border-radius: 6px;
+    margin-right: 4px;
+}
+#cvc{
+    display: inline-block;
+    width: 49%;
+    border: 1px solid #D1D5DB;
+    padding: 12px 6px;
+    border-radius: 6px;
+}
+#stripeError{
+    color: #EF4444;
+    margin-bottom: 14px;
+}

@@ -1,0 +1,67 @@
+@use "../../../theme/colours.scss" as colours;
+@import "../../../theme/theme.scss";
+label.custom-label{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: colours.$grey-900;
+}
+.custom-input-container{
+    input.custom-input{
+        padding: 11px 10px 11px 16px;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 18px;
+        background: #FFF;
+        border: none;
+        width: 100%;
+        z-index: 0;
+        outline: 2px solid colours.$grey-700;
+        border-radius: map-get($theme, borderRadius, border-radius-medium);
+        transition: outline .2s ease-in-out;
+        color: colours.$grey-700;
+        &:hover {
+            outline: 2px solid colours.$brand-500;
+        }
+    }
+    input.password-type{
+        padding: 11px 50px 11px 16px;
+        width: 100%;
+    }
+    input:focus-visible {
+        outline: 2px solid colours.$brand-500;
+    }
+    input::placeholder {
+        color: colours.$grey-400;
+    }
+    input:-ms-input-placeholder {
+        color: colours.$grey-400;
+    }
+    input::-ms-input-placeholder {
+        color: colours.$grey-400;
+    }
+    position: relative;
+
+    .eye-icon-hidden {
+        position: absolute;
+        color: #000;
+        min-width: 20px;
+        min-height: 20px;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        z-index: 1;
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+    .helper-text {
+        margin-top: 6px;
+    }
+}
+
+input:disabled {
+    color: black;
+    -webkit-text-fill-color: currentcolor;
+    opacity: 1;
+}
