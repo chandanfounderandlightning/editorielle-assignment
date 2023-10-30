@@ -2,14 +2,41 @@ import React, { useState } from "react";
 import DropDownIcon from "@/assets/icons/dropdown_icon.svg";
 import "./dropdown.scss";
 
-const Dropdown = ({ options, selectedValue, onChange, allData }: any) => {
+type CategoriesType = {
+  options: Options;
+};
+
+type AllDataType = {
+  id: number;
+  categories: Options[];
+  email: string;
+  first_name: string;
+  last_name: string;
+};
+
+type Options = {
+  id: number;
+  name: string;
+};
+
+const Dropdown = ({
+  options,
+  selectedValue,
+  onChange,
+  allData,
+}: {
+  options: CategoriesType[];
+  selectedValue: Options;
+  onChange: any;
+  allData: AllDataType[];
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: any) => {
+  const handleOptionClick = (option: Object) => {
     onChange(option);
     setIsOpen(!isOpen);
   };
@@ -20,11 +47,17 @@ const Dropdown = ({ options, selectedValue, onChange, allData }: any) => {
     }
   });
 
-  const finalOptionList = options.filter((option: any) => {
-    return !allData
-      .map((selectedCategory: any) => selectedCategory.id)
-      .includes(option.id);
-  });
+  const selectedCategories = allData.map(
+    (selectedCategory: any) => selectedCategory.id
+  );
+
+  const getOptionList = (selectedOption: Options) =>
+    options.filter((option: any) => {
+      return (
+        !selectedCategories.includes(option.id) ||
+        option.id === selectedOption.id
+      );
+    });
 
   return (
     <div className="dropdown mx-2 my-2">
@@ -41,18 +74,17 @@ const Dropdown = ({ options, selectedValue, onChange, allData }: any) => {
       </div>
       {isOpen && (
         <ul className="dropdown-menu w-full z-10">
-          {finalOptionList &&
-            finalOptionList?.map((list: any, index: any) => {
-              return (
-                <li
-                  key={index}
-                  onClick={() => handleOptionClick(list)}
-                  className="hover:bg-[#fecdd3]"
-                >
-                  {list.name}
-                </li>
-              );
-            })}
+          {getOptionList(selectedValue).map((list: any, index: any) => {
+            return (
+              <li
+                key={index}
+                onClick={() => handleOptionClick(list)}
+                className="hover:bg-[#fecdd3]"
+              >
+                {list.name}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
